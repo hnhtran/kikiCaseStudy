@@ -16,6 +16,7 @@ _Things to keep in mind_
 ### Offer Criteria
 The offers can be used according to the criteria that Tombo has captured in this table. Discount will not be provided if no offer code is applied.
 ![offer criteria](https://github.com/hnhtran/kikiCaseStudy/blob/main/assets/offerCriteria.png)
+
 ### Challenge
 Command line application to calculate the delivery cost for a given package with an offer code (if applicable).
 
