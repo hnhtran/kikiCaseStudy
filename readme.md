@@ -9,6 +9,7 @@ Kiki has invested in
 ## Problem 01
 ### Delivery Cost Estimation with Offers
 Since it’s a new business, the team has decided to pass coupons around the town which will help them attract more customers.
+
 _Things to keep in mind_
 * Only one offer code can be applied for any given package
 * Package should meet the required mentioned offer criteria
@@ -26,6 +27,7 @@ Deliver_cost = base_cost + (weight * 10) + (distance *5)
 ## Problem 02
 ### Delivery Time Estimation
 Now all these packages should be delivered to their destinations in the fleet of vehicles Kiki owns. She has N no. of vehicles available for delivering the packages.
+
 _Things to keep in mind_
 * Each vehicle has a limit (L) on maximum weight (kg) that can be carried
 * All vehicles travel at the same speed (S km/hr) and in the same route. It is assumed that all the destinations can be covered in a single route.
