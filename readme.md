@@ -32,7 +32,7 @@ _Things to keep in mind_
 * Each vehicle has a limit (L) on maximum weight (kg) that can be carried
 * All vehicles travel at the same speed (S km/hr) and in the same route. It is assumed that all the destinations can be covered in a single route.
 ### Delivery Criteria
-1. Always travelling at maximum speed (S km/hr)
+1. Always traveling at maximum speed (S km/hr)
 2. Multiple shipment? Heavier package preferred
 3. Multiple shipment? Same weight? Pickup closest to destination
 4. Finish delivery? Vehicle return to source station with same speed and available for another shipment
