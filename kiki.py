@@ -1,5 +1,5 @@
 from struct import pack
-
+import math
 
 code10 = 'OFR001'
 code7 = 'OFR002'
@@ -36,8 +36,8 @@ class KikiShop:
         code7 = 7% discount on d [50:150]km && w [50:200]kg
         code5 = 5% discount on d [50:250]km && w [10:150]kg
         """
-        pkgs = self.pkgs
-        # pkgs = [{'pkg_id1': 'pkg1', 'pkg_weight1': 5, 'pkg_distance1': 5, 'offer_code1': 'OFR001'}, {'pkg_id2': 'pkg2', 'pkg_weight2': 15, 'pkg_distance2': 5, 'offer_code2': 'OFR002'}, {'pkg_id3': 'pkg3', 'pkg_weight3': 10, 'pkg_distance3': 100, 'offer_code3': 'OFR003'}]
+        # pkgs = self.pkgs
+        pkgs = [{'pkg_id1': 'pkg1', 'pkg_weight1': 5, 'pkg_distance1': 5, 'offer_code1': 'OFR001'}, {'pkg_id2': 'pkg2', 'pkg_weight2': 15, 'pkg_distance2': 5, 'offer_code2': 'OFR002'}, {'pkg_id3': 'pkg3', 'pkg_weight3': 10, 'pkg_distance3': 100, 'offer_code3': 'OFR003'}]
         for i in range(len(pkgs)):
             print(f'package {i+1}: ', end = '')
             # pkg = pkgs[f'pkg{i}']
@@ -89,8 +89,8 @@ class KikiShop:
             # pkg = pkgs[f'pkg{i}']
             pkg_id = pkg['pkg_id{}'.format(i+1)]
             distance = pkg['pkg_distance{}'.format(i+1)]
-            weight = pkg['pkg_weight{}'.format(i+1)]
-            time = distance / speed
+            weight = pkg['pkg_weight{}'.format(i+1)] 
+            time = (math.floor((distance / speed) * 100) / 100)
             weight_objs[weight] = {'index': i, 'pkg_id': pkg_id, 'time': time, 'weight': weight, 'distance': distance}
         
         to_deliver_pkg = {}
@@ -112,7 +112,7 @@ class KikiShop:
                 distance2 = weight_objs[temp_weight_obj]['distance']
                 to_deliver_pkg[distance2] = weight_objs.pop(temp_weight_obj)
                 total_weight = max_weight_obj + temp_weight_obj
-                print(total_weight)
+                # print(total_weight)
                 # print(len(weight_obj))
                 # print(max(weight_obj.keys()))
                 if len(weight_obj) > 0 and total_weight < max(weight_obj.keys()):
@@ -124,7 +124,7 @@ class KikiShop:
             package_to_deliver(self)
             
         def asign_driver(self, package_to_deliver):
-            print(package_to_deliver)
+            # print(package_to_deliver)
             for i in range(len(drivers)):
                 if drivers[i]['available'] == True:
                     driver = drivers[i]
@@ -149,13 +149,13 @@ class KikiShop:
                 package_to_deliver.pop(min(package_to_deliver.keys()))
             driver['available_time'] += time * 2
         package_to_deliver(self)
-        print(to_deliver_pkg)
-        print(len(weight_objs))
+        # print(to_deliver_pkg)
+        # print(len(weight_objs))
         asign_driver(self, to_deliver_pkg)
-        print(to_deliver_pkg)
+        # print(to_deliver_pkg)
         tempobj = {}
         for key in weight_obj.keys():
-            print(weight_obj[key]['distance'])
+            # print(weight_obj[key]['distance'])
             tempobj[weight_obj[key]['distance']] = weight_obj[key]
             # print(tempobj)
             asign_driver(self, tempobj)
@@ -169,14 +169,38 @@ class KikiShop:
                 driver = drivers[i]
                 driver['available'] = False
                 driver['pkgs'].append(to_deliver_pkg['pkg_id'])
+                index = to_deliver_pkg['index']
+                pkgs[index]['delivered'] = True
+                pkgs[index]['driver'] = driver['driver']
+                pkgs[index][f'estimated_delivery_time{index+1}_in_hours'] = to_deliver_pkg['time'] + driver['available_time']
                 driver['available_time'] += to_deliver_pkg['time'] * 2
+                break
         weight_objs.clear()
         to_deliver_pkg.clear()
         # package_to_deliver(self)
-        print(weight_objs)
-        print(drivers)
-
-            
+        # print(weight_objs)
+        print(pkgs)
+        for i in range(len(pkgs)):
+            print(f'package {i+1}: ', end = '')
+            # pkg = pkgs[f'pkg{i}']
+            pkg = pkgs[i]
+            discount = pkg[f'discount{i+1}'] = 0
+            total_cost = f'total_cost{i+1}'
+            pkg_id = pkg['pkg_id{}'.format(i+1)]
+            distance = pkg['pkg_distance{}'.format(i+1)]
+            weight = pkg['pkg_weight{}'.format(i+1)]
+            offer_code = pkg['offer_code{}'.format(i+1)]
+            cost = self.base_delivery_cost + (weight * 10) + (distance * 5)
+            estimated_delivery_time = round(pkg[f'estimated_delivery_time{i+1}_in_hours'], 2)
+            if (offer_code == code10) and (distance < 200) and (weight in range(70, 200)):
+                    discount = int(cost * 0.1)
+            elif (offer_code == code7) and (distance in range(50, 150)) and (weight in range(50, 200)):
+                    discount = int(cost * 0.07)
+            elif (offer_code == code5) and (distance in range(50, 250)) and (weight in range(10, 150)):
+                    discount = int(cost * 0.05)
+            pkg[f'discount{i+1}'] = discount
+            pkg[total_cost] = cost - discount
+            print(f'{pkg_id} {discount} {pkg[total_cost]} {estimated_delivery_time}')
 
 deliveryCost = KikiShop(100, 5, 2, 70, 200)
 # print(deliveryCost)

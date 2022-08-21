@@ -170,6 +170,11 @@ class KikiShop:
                 driver['available'] = False
                 driver['pkgs'].append(to_deliver_pkg['pkg_id'])
                 driver['available_time'] += to_deliver_pkg['time'] * 2
+                index = to_deliver_pkg['index']
+                pkgs[index]['delivered'] = True
+                pkgs[index]['driver'] = driver['driver']
+                pkgs[index][f'estimated_delivery_time{index+1}_in_hours'] = to_deliver_pkg['time'] + driver['available_time']
+                break
         weight_objs.clear()
         to_deliver_pkg.clear()
         print(drivers)
